@@ -6,7 +6,6 @@ import com.invillia.acme.repository.StoreRepository;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -24,12 +24,17 @@ public class StoreController {
 	@Autowired
 	StoreRepository storeRepository;
 
-	
-	//TODO IMPLEMENTAR A BUSCA POR MULTIPLOS PARAMETROS 
-	//Retrieve a Store by parameters
+	// TODO IMPLEMENTAR A BUSCA POR MULTIPLOS PARAMETROS
+	// Retrieve a Store by parameters
 	@RequestMapping(value = "/stores", method = RequestMethod.GET)
-	public ResponseEntity<?> findStores() {
-		List<Store> stores = storeRepository.findAll();
+	public ResponseEntity<?> findStores(@RequestParam("name") Optional<String> name,
+			@RequestParam("address") Optional<String> address) {
+		List<Store> stores = null;
+		if (name.isPresent() && address.isPresent()) {
+			stores = storeRepository.findByNameAndAddress(name.get(), address.get());
+		} else {
+			stores = storeRepository.findAll();
+		}
 		if (stores.isEmpty()) {
 			return new ResponseEntity<List<Store>>(HttpStatus.NO_CONTENT);
 		}

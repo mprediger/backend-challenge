@@ -2,12 +2,14 @@ package com.invillia.acme.controller;
 
 import com.invillia.acme.model.Order;
 import com.invillia.acme.model.OrderItem;
+import com.invillia.acme.model.Payment;
 import com.invillia.acme.repository.OrderItemRepository;
 import com.invillia.acme.repository.OrderRepository;
+import com.invillia.acme.repository.PaymentRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -28,13 +31,24 @@ public class OrderController {
 	
 	@Autowired
 	OrderItemRepository orderItemRepository;
+	
+	@Autowired
+	PaymentRepository paymentRepository;
 
 	
 	//TODO IMPLEMENTAR A BUSCA POR MULTIPLOS PARAMETROS 
 	//Retrieve a Order by parameters
 	@RequestMapping(value = "/orders", method = RequestMethod.GET)
-	public ResponseEntity<?> findOrders() {
-		List<Order> orders = orderRepository.findAll();
+	public ResponseEntity<?> findOrders(@RequestParam("address") Optional<String> address,
+			@RequestParam("confirmation") Optional<String> confirmation,
+			@RequestParam("date") Optional<String> date,
+			@RequestParam("status") Optional<String> status) {
+		List<Order> orders = null;
+		if (address.isPresent() || confirmation.isPresent() || date.isPresent() || status.isPresent()) {
+			orders = orderRepository.findByAddressOrConfirmationOrDateOrStatus(address.isPresent() ? address.get():null,confirmation.isPresent() ? confirmation.get():null,date.isPresent() ? date.get():null,status.isPresent() ? status.get():null);
+		}else{
+			orders = orderRepository.findAll();
+		}
 		if (orders.isEmpty()) {
 			return new ResponseEntity<List<Order>>(HttpStatus.NO_CONTENT);
 		}
@@ -68,6 +82,19 @@ public class OrderController {
 		orderItem = orderItemRepository.save(orderItem);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/orders/{id}/items/{idItem}").buildAndExpand(id,orderItem.getId()).toUri());
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+	
+	@RequestMapping(value = "/orders/{id}/payments", method = RequestMethod.POST)
+	public ResponseEntity<Void> insertPaymentToOrder(@PathVariable("id") long id, @RequestBody Payment payment, UriComponentsBuilder ucBuilder) {
+		Optional<Order> order = orderRepository.findById(id);
+		if (order == null) {
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		}
+		payment.setOrder(order.get());
+		payment = paymentRepository.save(payment);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(ucBuilder.path("/orders/{id}/payments/{idItem}").buildAndExpand(id,payment.getId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
 	}
 

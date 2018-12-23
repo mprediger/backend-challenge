@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,14 +39,18 @@ public class Payment implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date paymentDate;
 	
+	@ManyToOne
+	private Order order;
+	
 	public Payment() {  
 	} 
 
-	public Payment(String status, Number creditCardNumber, Date paymentDate) {
+	public Payment(String status, Number creditCardNumber, Date paymentDate, Order order) {
 		super();
 		this.status = status;
 		this.creditCardNumber = creditCardNumber;
 		this.paymentDate = paymentDate;
+		this.order = order;
 	}
 
 	public Long getId() {
@@ -79,5 +84,15 @@ public class Payment implements Serializable {
 	public void setPaymentDate(Date paymentDate) {
 		this.paymentDate = paymentDate;
 	}
+
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
+
 
 }
