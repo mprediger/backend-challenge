@@ -111,7 +111,11 @@ public class OrderController {
 		orderRepository.save(currentOrder.get());
 		return new ResponseEntity<Order>(currentOrder.get(), HttpStatus.OK);
 	}
-
+	
+	/**
+	* Método responsável por efetuar a exclusão de uma ordem de compra.
+	* @author Marcos Arno Prediger
+	*/
 	@RequestMapping(value = "/orders/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteOrder(@PathVariable("id") long id) {
 
