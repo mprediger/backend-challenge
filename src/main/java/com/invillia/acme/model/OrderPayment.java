@@ -22,7 +22,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "payment_table")
-public class Payment implements Serializable {
+public class OrderPayment implements Serializable {
 
 	private static final long serialVersionUID = -4180224426000802799L;
 
@@ -38,19 +38,19 @@ public class Payment implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	private Date paymentDate;
-	
+
 	@ManyToOne
 	private Order order;
-	
-	public Payment() {  
-	} 
 
-	public Payment(String status, Number creditCardNumber, Date paymentDate, Order order) {
+	public OrderPayment(String status, Number creditCardNumber, Date paymentDate, Order order) {
 		super();
 		this.status = status;
 		this.creditCardNumber = creditCardNumber;
 		this.paymentDate = paymentDate;
 		this.order = order;
+	}
+
+	public OrderPayment() {
 	}
 
 	public Long getId() {
@@ -92,7 +92,5 @@ public class Payment implements Serializable {
 	public void setOrder(Order order) {
 		this.order = order;
 	}
-
-
 
 }

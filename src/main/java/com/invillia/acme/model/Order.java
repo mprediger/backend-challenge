@@ -19,31 +19,27 @@ import javax.persistence.TemporalType;
  */
 
 @Entity
-@Table(name="order_table")
-public class Order implements Serializable{
-	
+@Table(name = "order_table")
+public class Order implements Serializable {
+
 	private static final long serialVersionUID = -3497127092216679703L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	@Column(name="address", nullable=false)
+
+	@Column(name = "address", nullable = false)
 	private String address;
-	
-	@Column(name="confirmation", nullable=false)
+
+	@Column(name = "confirmation", nullable = false)
 	private String confirmation;
-	
+
 	@Temporal(TemporalType.DATE)
-	@Column(name="date", nullable=false)
+	@Column(name = "date", nullable = false)
 	private Date date;
-	
-	@Column(name="status", nullable=false)
+
+	@Column(name = "status", nullable = false)
 	private String status;
-	
-	
-	public Order() {  
-	}  
 
 	public Order(String address, String confirmation, Date date, String status) {
 		super();
@@ -52,8 +48,9 @@ public class Order implements Serializable{
 		this.date = date;
 		this.status = status;
 	}
-	
-	
+
+	public Order() {
+	}
 
 	public Long getId() {
 		return id;

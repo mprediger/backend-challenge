@@ -30,14 +30,14 @@ public class Store implements Serializable {
 
 	@Column(name = "address", nullable = false)
 	private String address;
-	
-	public Store() {  
-	} 
 
 	public Store(String name, String address) {
 		super();
 		this.name = name;
 		this.address = address;
+	}
+
+	public Store() {
 	}
 
 	public Long getId() {

@@ -18,29 +18,26 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name="order_item_table")
-public class OrderItem implements Serializable{
-	
+@Table(name = "order_item_table")
+public class OrderItem implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Column(name = "description", nullable = false)
 	private String description;
-	
-	@Column(name="unitPrice", nullable=false)
+
+	@Column(name = "unitPrice", nullable = false)
 	private String unitPrice;
-	
-	@Column(name="quantity", nullable=false)
+
+	@Column(name = "quantity", nullable = false)
 	private Integer quantity;
-	
+
 	@ManyToOne
 	private Order order;
-	
-	public OrderItem() {  
-	} 
 
 	public OrderItem(String description, String unitPrice, Integer quantity, Order order) {
 		super();
@@ -50,14 +47,15 @@ public class OrderItem implements Serializable{
 		this.order = order;
 	}
 
-	
-	
-	public Order getOrder() {
-		return order;
+	public OrderItem() {
 	}
 
-	public void setOrder(Order order) {
-		this.order = order;
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getDescription() {
@@ -84,14 +82,12 @@ public class OrderItem implements Serializable{
 		this.quantity = quantity;
 	}
 
-	public Long getId() {
-		return id;
+	public Order getOrder() {
+		return order;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 
-	
-	
 }
